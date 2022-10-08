@@ -50,7 +50,7 @@ def main():
     gpu_matmul[blockspergrid, threadsperblock](gpu_arr1, gpu_arr2, gpu_arr_result)
     print("--- %s seconds (GPU)---" % (time.time() - start_time))
 
-    # копируем результат работ GPU в оперативную память систем
+    # копируем результат работы GPU в оперативную память системы
     cpu_copy_arr = gpu_arr_result.copy_to_host()
 
     # проверка равенства матриц
