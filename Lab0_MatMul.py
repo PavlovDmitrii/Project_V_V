@@ -4,8 +4,8 @@ import math
 import numpy as np
 
 size = 200
-cpu_arr1 = np.random.randint(0, 9, (size, size))
-cpu_arr2 = np.random.randint(0, 9, (size, size))
+cpu_arr1 = np.random.randint(0, 10, (size, size))
+cpu_arr2 = np.random.randint(0, 10, (size, size))
 cpu_arr_result = np.zeros((size, size), dtype=int)
 
 gpu_arr1 = cuda.to_device(cpu_arr1)
@@ -36,7 +36,7 @@ def main():
     blockspergrid_x = int(math.ceil(cpu_arr1.shape[0] / threadsperblock[0]))
     blockspergrid_y = int(math.ceil(cpu_arr2.shape[1] / threadsperblock[1]))
     blockspergrid = (blockspergrid_x, blockspergrid_y)
-    print(blockspergrid, threadsperblock)
+    print("размер сетки = ", blockspergrid, threadsperblock)
 
     # работа CPU
     print("CPU start")
@@ -51,10 +51,10 @@ def main():
     print("--- %s seconds (GPU)---" % (time.time() - start_time))
 
     # копируем результат работы GPU в оперативную память системы
-    cpu_copy_arr = gpu_arr_result.copy_to_host()
+    #cpu_copy_arr = gpu_arr_result.copy_to_host()
 
     # проверка равенства матриц
-    print(np.array_equal(cpu_arr_result, cpu_copy_arr))
+    #print(np.array_equal(cpu_arr_result, cpu_copy_arr))
     print("end")
 
 
