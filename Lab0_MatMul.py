@@ -16,8 +16,8 @@ def cpu_matmul(a, b, c):
         for j in range(size):
             rez = 0
             for z in range(size):
-                rez += a[i,z] * b[z,j]
-            c[i,j] = rez
+                rez += a[i, z] * b[z, j]
+            c[i, j] = rez
 
 @cuda.jit
 def gpu_matmul(a, b, c):
@@ -25,8 +25,8 @@ def gpu_matmul(a, b, c):
         for j in range(size):
             rez = 0
             for z in range(size):
-                rez += a[i,z] * b[z,j]
-            c[i,j] = rez
+                rez += a[i, z] * b[z, j]
+            c[i, j] = rez
 
 def main():
 
