@@ -1,11 +1,11 @@
 from numba import cuda
 import time
-import numpy as np
+import random
 
-size = 10
-cpu_arr1 = np.random.randint(0, 10, (size, size))
-cpu_arr2 = np.random.randint(0, 10, (size, size))
-cpu_arr_result = np.zeros((size, size), dtype=int)
+size = 3
+cpu_arr1 = [[random.randint(0,9) for j in range(size)] for i in range(size)]
+cpu_arr2 = [[random.randint(0,9) for j in range(size)] for i in range(size)]
+cpu_arr_result = [[0 for j in range(size)] for i in range(size)]
 
 gpu_arr1 = cuda.to_device(cpu_arr1)
 gpu_arr2 = cuda.to_device(cpu_arr2)
@@ -16,8 +16,8 @@ def cpu_matmul(a, b, c):
         for j in range(size):
             rez = 0
             for z in range(size):
-                rez += a[i,z] * b[z,j]
-            c[i,j] = rez
+                rez += a[i][z] * b[z][j]
+            c[i][j] = rez
 
 @cuda.jit
 def gpu_matmul(a, b, c):
@@ -25,15 +25,15 @@ def gpu_matmul(a, b, c):
         for j in range(size):
             rez = 0
             for z in range(size):
-                rez += a[i,z] * b[z,j]
-            c[i,j] = rez
+                rez += a[i][z] * b[z][j]
+            c[i][j] = rez
 
 def main():
 
     # настройка ядра
     threadsperblock = (32, 32)
-    blockspergrid_x = int(cpu_arr1.shape[0] / threadsperblock[0]) + 1
-    blockspergrid_y = int(cpu_arr2.shape[1] / threadsperblock[1]) + 1
+    blockspergrid_x = int(size / threadsperblock[0]) + 1
+    blockspergrid_y = int(size / threadsperblock[1]) + 1
     blockspergrid = (blockspergrid_x, blockspergrid_y)
     print("размер сетки = ", blockspergrid, threadsperblock)
 
@@ -53,7 +53,7 @@ def main():
     cpu_copy_arr = gpu_arr_result.copy_to_host()
 
     # проверка равенства матриц
-    print(np.array_equal(cpu_arr_result, cpu_copy_arr))
+    print((cpu_copy_arr == cpu_arr_result).all())
     print("end")
 
 
