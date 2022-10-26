@@ -11,6 +11,7 @@ gpu_arr1 = cuda.to_device(cpu_arr1)
 gpu_arr2 = cuda.to_device(cpu_arr2)
 gpu_arr_result = cuda.device_array((len(cpu_arr1), len(cpu_arr2)))
 
+
 def cpu_matmul(a, b, c):
     for i in range(size):
         for j in range(size):
@@ -18,6 +19,7 @@ def cpu_matmul(a, b, c):
             for z in range(size):
                 rez += a[i, z] * b[z, j]
             c[i, j] = rez
+
 
 @cuda.jit
 def gpu_matmul(a, b, c):
@@ -27,6 +29,7 @@ def gpu_matmul(a, b, c):
             for z in range(size):
                 rez += a[i, z] * b[z, j]
             c[i, j] = rez
+
 
 def main():
 
